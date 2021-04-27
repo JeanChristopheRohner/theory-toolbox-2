@@ -97,14 +97,12 @@
 
 
     <div class="w3-container">
-        
-        <p>Wellcome! Here you will find information about logic programming for theory representation and scientific inference,
-            with applications in psychology, including the written documentation
-            for Theory Toolbox 2. Check out the video below or the abstract to get an introduction!
-        </p>
 
-        <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/503833989?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/542229142?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
         
+                <p>Wellcome! This page is about theory representation and scientific inference with first order logic,
+            including the written documentation for Theory Toolbox 2.
+        </p>
     </div>
 
     <!-- Abstract -->
@@ -117,10 +115,10 @@
             <h5>Build Explicit and Expressive Theories in First Order Predicate Logic</h5>
             <p style="font-size: 100%;">
                 A logic program can represent both the qualitative and quantitative components of a theory in 
-                first order predicate logic, one of the most powerful formal languages. Such a representation 
+                first order predicate logic, one of the most powerful formal languages that exist. Such a representation 
                 includes any background assumptions, the meaning of events, and how events are qualitatively and 
                 quantitatively related. In fact, any currently known computation can be expressed in a
-                logic program (we use Prolog which is Turing complete). <br><br><br>
+                logic program (we use Prolog which is Turing complete). <br><br>
             </p>
         </div>
         <div class="w3-col l3 m6 w3-blue w3-container w3-padding-16">
@@ -145,10 +143,11 @@
         <div class="w3-col l3 m6 w3-teal w3-container w3-padding-16 w3">
             <h5>Use Rational Criteria to Evaluate Theories and Compare Them to Other Theories</h5>
             <p style="font-size: 100%;">
-                Using rational criteria for theory evaluation is an important part of theory evaluation, in addition to data collection and analysis. 
+                Using rational criteria for theory evaluation is an important part of research, in addition to data collection and data analysis:
+                Independently of what empirical observations show, is a theory a good one? 
                 With Theory Toolbox 2 it is possible to check whether a theory is internally coherent (not self contradictory),
-                measure how general it is (how falsifiable it is) and check whether it subsumes another theory (it contains everything that 
-                another theory contains). <br><br><br>
+                measure how general it is and check whether it subsumes another theory (it makes all the 
+                predictions that another theory makes and more). <br>
             </p>
         </div>
     </div>
@@ -187,8 +186,8 @@
 
         <h3>2. Installation and Setup</h3>
         <p>
-            To run Theory Toolbox 2 you need SWI Prolog (Wielemaker et al., 2011). The sections below explain all the steps 
-            necessary to get up an running.
+            To run Theory Toolbox 2 you need SWI Prolog (Wielemaker et al., 2011). The sections below explain all the necessary steps 
+             to get up an running.
         </p>
         <h4>2.1. Installation</h4>
         <p>
@@ -262,7 +261,7 @@
         <p>
             To use the toolbox on your own theory
             <ol>
-                <li>Create a text file (UTF-8 with BOM encoding) and write the following at 
+                <li>Create a text file (UTF-8 with BOM encoding) with the file extension <incode>.pl</incode> and write the following at 
                 the top of this file: <incode>:-include('theoryToolbox2.pl').</incode> Your file has to be in the same directory as theoryToolbox2.pl 
                 (alternatively you can modify the include directory to point to another directory that contains theoryToolbox2.pl).</li>
                 <li>Open the file in Visual Studio Code and run a query (as described under 6 above).</li>
@@ -335,8 +334,8 @@
             the consequent is provable without additional conditions. In a clause with a non empty antecedent, 
             <symbolic>C ⇐ A<sub>1</sub> ∧ A<sub>2</sub> ∧ ... ∧ A<sub>n</sub>.</symbolic> , <symbolic>C</symbolic> is 
             provable if <symbolic>A<sub>1</sub> ∧ A<sub>2</sub> ∧ ... ∧ A<sub>n</sub></symbolic> is provable. Some examples are 
-            given in the program in Figure 1. The first two clauses mean that it is provable that Homer is Bart's parent, 
-            and that Abe is Homer's parent. The last clause has the following meaning: For all X, Y and Z, if X is Zs parent and if Z is Ys
+            given in the program in Figure 1. The first two clauses mean that it is provable that Abe is Homer's parent, and that Homer is Bart's parent. 
+            The last clause has the following meaning: For all X, Y and Z, if X is Zs parent and if Z is Ys
             parent, then X is Ys grandparent.
         </p>
         <p>
@@ -357,7 +356,7 @@
             <symbolic>A</symbolic> is not provable; i.e. <symbolic>A</symbolic> is not entailed by the program.
             Note that this is different from saying that <symbolic>A</symbolic> is not the case. That 
             <symbolic>A</symbolic> is not the case has to be indicated explicitly, e.g. with a probability of 0: <incode>p(A, 0).</incode>,
-            which means that it <i>is</i> provable that <symbolic>A</symbolic> has a probability of zero.
+            which means that it <i>is</i> provable that <symbolic>A</symbolic> has a probability of zero (<symbolic>A</symbolic> is not the case).
         </p>
         <p>Clauses with a non empty antecedent usually contain variables, and they therefore describe general relations. 
             For example, <incode>aunt(A, C) ⇐ sister(A, M) ∧ parent(M, C)</incode> means that the aunt relation holds for any
@@ -418,7 +417,8 @@
             <li>
                 The constructs (concepts) in a theory can be represented by a five argument event atom. Its components are 
                 a subject, a verb, an object, a time frame, and a probability value (but any number of additional arguments,
-                such as a place argument, can be added if relevant). By doing so a theory program represents the meaning of constructs.
+                such as a place argument, can be added if relevant). By doing so a theory program represents the meaning of constructs,
+                not just their names.
                 Moreover any argument can be a constant, a variable or a function. The emotion theory, for example, contains several such 
                 event atoms. Note also that a function is used as the object argument in each emotion clause to distinguish between appraisal and what is appraised.
                 In fear, for example, appraisal is about a future goal incongruent event.
@@ -430,13 +430,14 @@
                 (see the main clauses of the theory).
             </li>
             <li>
-                In the clauses of a theory, the domains of all variables should be defined.
+                In the clauses of a theory, the domains of all variables should be defined intensionally.
                 This explicitly states the objects that the theory is about, in terms of a set of necessary and sufficient conditions. 
                 For example, in the main 
                 clauses of the emotion theory, H1, H2, E and G and so on, are defined to be humans, events, and goals, respectively. 
             </li>
         
         </ul>
+
 
         <!-- Advantages of Logic Programming -->
 
@@ -447,12 +448,20 @@
         </p>
         <ul>
             <li>
+                <b>Validity.</b> When a theory is represented in a logic program it is possible to use resolution to derive valid conclusions from it.
+                A valid conclusion is a conclusion that <i>has</i> to be true if the information in the program is true. Schematically,
+                <symbolic>M ∧ B ⊨ C</symbolic>, where <symbolic>M</symbolic> is 
+                the set of main clauses, <symbolic>B</symbolic> the set of background clauses, and <symbolic>C</symbolic> the conclusion. So when a theory 
+                is a good one one, it can be used to generate accurate predictions and explanations. This 
+                aspect is relevant whenever a scientific theory is used to generate new knowledge or in an applied setting.
+            </li>
+            <li>
                 <b>Explicit Background Assumptions.</b> Because first order logic can represent almost any kind of relation,
                 it is possible to build a detailed formalization of the background assumptions in a theory. Any prediction <symbolic>C</symbolic> from a theory is 
-                then entailed by its main clauses <symbolic>M</symbolic> and its background clauses <symbolic>B</symbolic>; 
-                schematically <symbolic>M ∧ B ⊨ C</symbolic>. So if states of affairs are at odds with <symbolic>C</symbolic>, the blame <i>has</i> to fall on 
+                then entailed by its main clauses <symbolic>M</symbolic> and its background clauses <symbolic>B</symbolic>: 
+                <symbolic>M ∧ B ⊨ C</symbolic>. So if states of affairs are at odds with <symbolic>C</symbolic>, the blame <i>has</i> to fall on 
                 either <symbolic>M</symbolic> or <symbolic>B</symbolic>, or both <symbolic>M</symbolic> and <symbolic>B</symbolic>. 
-                When (informally) deducing empirical predictions from a natural language representation, in contrast, there is a higher 
+                When (informally) inferring empirical predictions from a natural language representation, in contrast, there is a higher 
                 risk that we unwittingly presuppose one or more <symbolic>B</symbolic>s that were never in the theory. So a test of such 
                 a prediction becomes ambiguous: If a <symbolic>B</symbolic> wasn't in the theory, an empirical test that assumed this 
                 <symbolic>B</symbolic> is not a test of the theory.
@@ -469,29 +478,19 @@
                 <b>Universal Statements About Well Defined Domains.</b> Scientific theories consist of a set of universal statements that describe 
                 relations between <i>all</i> events
                 of a certain kind; i.e. they are nomothetic descriptions (Popper, 1972). A powerful feature of first order logic is that is is 
-                possible to say that a certain relation holds for all objects in one 
+                possible to explicitly say that a certain relation holds for all objects in one 
                 or more sets <i>and</i> to provide detailed definitions of these sets. This is achieved by using variables and by writing 
                 any domain definitions in the antecedent of a clause.
             </li>
             <li>
                 <b>Modularity.</b> Another powerful feature of logic programs is that they are modular representations, meaning that: 
                 (1) It is possible to add any number of components to a theory without modifying the components that already exist in the theory.
-                (2) Adding components to a theory will usually make the theory entail more inforrmation than just the information contained 
+                (2) Adding components to a theory will usually make the theory entail more information than just the information contained 
                 in the added components.
             </li>
             <li>
-                <b>Validity.</b> When a theory is represented in a logic program it is possible to use resolution to derive valid conclusions from it.
-                A valid conclusion is a conclusion that <i>has</i> to be true if the information in the program is true. Schematically,
-                <symbolic>M ∧ B ⊨ C</symbolic>, where <symbolic>M</symbolic> is 
-                the set of main clauses, <symbolic>B</symbolic> the set of background clauses, and <symbolic>C</symbolic> the conclusion. So when a theory 
-                is a good one one, it can be used to generate accurate predictions and explanations. It goes without saying that this 
-                function is relevant whenever a scientific theory is used in an applied setting. And when a theory is pitted against empirical data,
-                finding not <symbolic>C</symbolic> must necessarily mean that either <symbolic>M</symbolic> or <symbolic>B</symbolic>, or both 
-                <symbolic>M</symbolic> and <symbolic>B</symbolic> are wrong.
-            </li>
-            <li>
                 <b>Rational Theory Evaluation.</b> Because theory programs are formal representations, it is possible to hand them to 
-                algorithms that perform basic sanity checks, already before empirical testing. For example, Theory Toolbox has predicates that ckeck whether a theory 
+                algorithms that perform basic sanity checks, already before empirical testing. For example, Theory Toolbox 2 has predicates that ckeck whether a theory 
                 is internally coherent, how general it is, and if it subsumes one or more other theories. 
             </li>
             <li>
@@ -519,9 +518,9 @@
             that this goal is entailed by the theory program. If the goal contains one or
             more variables, all the variable instantiations that are entailed by the program are shown.
             As an example, suppose the query goal is <incode>grandparent(abe, bart).</incode> , which in relation to Figure 1, 
-            means "does the program entail this relation between constants?". In this case the answer would be <incode>true</incode>. 
+            means "does the program entail that the grandparent trelation holds between Abe and Bart?". In this case the answer would be <incode>true</incode>. 
             The query goal <incode>grandparent(abe, X)</incode>, instead means 
-            "for what Xs does this relation hold according to the program?". In this case we get any constants for 
+            "for what Xs does the relation in which Abe is the grandparent hold according to the program?". In this case we get any constants for 
             which the goal holds (is provable); i.e. <incode>X = bart</incode>.
         </p>
         <p>
@@ -553,9 +552,9 @@
             And now we finally get to the conditions for when a goal is provable (without going into technical details).
             A goal is provable in each one of the following cases:
             <ol>
-                <li>The goal is true, e.g. as in <incode>{4 = 2 + 2}</incode>, or <incode>{X = 2 + 3, X > 1}</incode></li>
-                <li>The goal unifies with the consequent of a clause that has an empty antecedent</li>
-                <li>The goal unifies with the consequent of a clause whose antecedent is provable</li>
+                <li>The goal is true (e.g. as in <incode>{4 = 2 + 2}</incode>, or <incode>{X = 2 + 3, X > 1}</incode>).</li>
+                <li>The goal unifies with the consequent of a clause that has an empty antecedent (when the antecedent is empty the consequent holds unconditionally).</li>
+                <li>The goal unifies with the consequent of a clause whose antecedent is provable (per modus ponens, the consequent holds if the antecedent holds).</li>
                 <li>The goal unifies with a term in INPUT</li>
             </ol>
             But what does INPUT mean? More about that in the next section.
@@ -566,7 +565,7 @@
             considered provable <i>in addition</i> to the information in a theory program. Because theories should only contain 
             general statements, they are not supposed to be filled will all the particular instances to which they may be applied. 
             For example, a theory about kinship, should not contain clauses about Homer being the parent of Bart and so on (see Figure 1). 
-            Such information should be provided in INPUT instead. The theory, per se, should only contain general statements like 
+            Information that pertains to particular instances should be provided in INPUT instead. The theory, per se, should only contain general statements like 
             <incode>grandparent(G, C) ⇐ parent(G, P) ∧ parent(P, C).</incode> . Syntactically, INPUT is a Prolog list, i.e. a comma delimited 
             list of atomic formulas in square brackets. So by writing, for example, 
             <incode>INPUT = [parent(jaqueline, marge), parent(marge, lisa)]</incode>, we declare that these goals are provable 
@@ -595,6 +594,7 @@
         </p>
         <p>
             Figure 3 shows two queries with provable/3 and the associated output predicate showProvable/1. The underscores in the goal are anonymous variables.
+            An anonymous variable unifies with anything, like an ordinary variable (written with an initial capital letter).
             Using an anonymous variable for an argument in the goal is equivalent to saying "Whatever the theory entails for this argument and predicate.".
             Note, for example, that <incode>aunt(selma, lisa)</incode> holds because the information that leads up to this conclusion is a combination 
             of the clauses in the program and the information in <incode>INPUT</incode> (see the discussion in the previous section).
@@ -721,7 +721,7 @@
             This tells maxValue/4 that it is the value of <incode>X</incode> we want to maximize.
         </p>
         <p>
-            The output shows a proof for the goal, such that the <incode>X</incode> variable in the goal is as high as possible. Note that the proof shows 
+            The output shows a proof for the goal, which is such that the <incode>X</incode> variable in the goal is as high as possible. Note that the proof shows 
             all the constants and numerical computations that lead up to this conclusion.
         </p>
         <p>
@@ -733,11 +733,18 @@
         <p>
             Figure 8 shows an example in which maxValue/4 is applied to <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/theoryExamples/substanceMisuseExample.pl" target="_blank">
             substanceMisuseExample.pl</a>. The goal corresponds to "somebody eats unhealthy at time 6 with probability X".
-            In addition to the other prerequisites for the theory (defined in it's INPUT section), <incode>INPUT</incode> contains an atom <incode>misuse(eatUnhealthy)</incode>. This allows 
-            the theory to also entail things about this behavior (eating unhealthy was not defined as a misuse behavior in the background clauses).
+            A proof which is such that the value of <incode>X</incode> is high is relevant here, because it contains an explanation for a problem (eating unhealthy)
+            which we can use to devise a solution.
+            <incode>INPUT</incode> contains <incode>source(_)</incode>, which assumes that any source holds, because an anonymous variable unifies with anything
+            (e.g. <incode>theoryOfPlannedBehavior</incode>, <incode>operantLearning</incode> and so on, see the theory).
+            <incode>INPUT</incode> also contains <incode>exogenousEvent(_, _, _, _, 0.1)</incode> and <incode>exogenousEvent(_, _, _, _, 0.9)</incode>.
+            This assumes that <i>any</i> exogenous event holds with a probability of 0.1, and that <i>any</i> exogenous event holds with probability 0.9.
+            The reason for assigning values in these predicates is that they contain equations for exogenous variables (variables that do not appear as dependents in any theory equation).
+            <incode>INPUT</incode> also contains an atom <incode>misuse(eatUnhealthy)</incode>. This allows 
+            the theory to be applied to this behavior as well (eating unhealthy was not defined as a misuse behavior in the background clauses).
         </p>
-        <p>In the output, the proof contains the values of exogenous variables that maximise the value argument of the goal; these values then 
-            propagate in the systems of equations that lead up to the numerical value in the goal.
+        <p> The output contains a proof which is such that values of exogenous variables maximize the numerical argument <incode>X</incode> in the goal. 
+            Note how these values then propagate in the systems of equations that lead up to <incode>X</incode>.
         </p>
         <p>
             <b>Figure 8. maxValue/4 used  on the Substance Misuse Example</b>
@@ -822,7 +829,7 @@
             <incode>showFalsifiability(RESULT)</incode> prints the results of <incode>falsifiability(GOAL, INPUT, RESULT)</incode> to the console.
         </p>
         <p>
-            Consider Figure 11 which shows a toy exaple involving falsifiability/3. In the example there are two subtheories: subTheoryA and subTheoryB.
+            Consider Figure 11 which shows a toy example involving falsifiability/3. In the example there are two subtheories: subTheoryA and subTheoryB.
             The second one is more general because a parent is defined as either a mother or a father. Note that in <incode>q61</incode> and <incode>q62</incode>
             the information in <incode>INPUT</incode> is the same, except that in the first case subTheoryA holds and in the second case 
             subTheoryB holds. The output shows that subTheoryB is more falsifiable because it makes more predictions; i.e. it is a more general theory.
@@ -888,7 +895,7 @@
             The goal corresponds to "somebody can deduce that some object is beyond some other object at some time with some probability".
             The clauses of this theory either contain an atom <incode>source(recursive)</incode> or <incode>source(nonrecursive)</incode>. In the query 
             these are used as arguments to subsumes/5 to find out if the recursive theory subsumes the non recursive one. 
-            As shown in the output, the recursive theory indeed subsumes the non recursive one; i.e. all the clauses in the non recursive theory also 
+            As shown in the output, the recursive theory indeed subsumes the non recursive one; i.e. all the predictions in the non recursive theory also 
             exist in the recursive one.
         </p>
         <p>
@@ -930,11 +937,16 @@
         <p>
             This project would not have been possible without the kind help of several people. 
             On the SWI Prolog forum I want to thank Alan B, Anne O, Carlo C, David T, Eric T, Fabrizzion R, Jan W, Paul B, Paulo M and Peter L.
-            On StackOverflow i want to thank Daniel L, @false, @Guy Coder,@lurker, @Mostowski Collapse, @repeat. 
-            And a big thanks goes to Håkan K for helping me solve some tricky problems and giving me hands on advice!
+            On StackOverflow i want to thank Daniel L, @false, @Guy Coder,@lurker, @Mostowski Collapse, @repeat. At my uni I want to thank Martin B and
+            Erik J O. And a big thanks goes to Håkan K for helping me solve some tricky problems and giving me hands on advice!
         </p>
         <p>
-            The meta-interpreters in Theory Toolbox have been inspired by Sterling and Shapiro's The Art of Prolog and Markus Triska's The Power of Prolog.
+            The meta-interpreters in Theory Toolbox have been inspired by Sterling and Shapiro's 
+            <a href="https://mitpress.mit.edu/books/art-prolog-second-edition">The Art of Prolog</a> and Markus Triska's 
+            <a href="https://www.metalevel.at/prolog" target="blank">The Power of Prolog</a>.
+        </p>
+        <p>
+            All of the algorithms in Theory Toolbox 2 are written in <a href="https://www.swi-prolog.org/">SWI Prolog</a>, a fantastic and free Prolog system.
         </p>
 
     </div>
