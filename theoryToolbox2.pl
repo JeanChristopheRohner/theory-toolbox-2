@@ -1,7 +1,7 @@
 ﻿% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % INFO
 
-% © Jean-Christophe Rohner 2019, 2020
+% © Jean-Christophe Rohner 2019 - 2021
 % This is experimental software. Use at your own risk.
 % See the LICENSE file for more information.
 
@@ -23,23 +23,6 @@ goal_expansion(¬A, \+A).
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % PROVABLE
 
-% provable(GOAL, INPUT, RESULT). 
-% Query if GOAL is provable given INPUT and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments.
-% INPUT should be a list of zero or more atomic formulas.
-
-% showProvable(RESULT). 
-% Prints the RESULT obtained from provable(GOAL, INPUT, RESULT) to the console.
-
-% Usage examples:
-% tutorialExamples.pl
-% collinsQuillianExample.pl
-% phobiaExample.pl
-% planningExample.pl
-% substanceMisuseExample.pl
-% substanceMisuseExampleState.pl
-
-
 provable(G, I, G):- provable0(G, I).
 
 provable0(true, _):- !.
@@ -55,25 +38,6 @@ showProvable(G):- formatOutputTerm(G, G1), writeln(G1).
 
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % PROVE
-
-% prove(GOAL, INPUT, RESULT). 
-% Find a proof for GOAL given INPUT and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments.
-% INPUT should be a list of zero or more atomic formulas.
-
-% showProof(RESULT, OPTION). 
-% Prints the proof obtained from prove(GOAL, INPUT, RESULT) to the console.
-% OPTION should be one of the following: monochrome, color, lanes
-
-% Usage examples:
-% tutorialExamples.pl
-% collinsQuillianExample.pl
-% naturalSelectionExample.pl
-% planningExample.pl
-% substanceMisuseExample.pl
-% substanceMisuseExampleState.pl
-
-
 
 prove(true, _, true):- !.
 prove((G1, G2), I, (P1, P2)):- !, prove(G1, I, P1), prove(G2, I, P2).
@@ -122,24 +86,6 @@ color(X, fg(255, 196, 126)):- X > 17.
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % MAXVALUE
 
-% maxValue(X, GOAL, INPUT, RESULT). 
-% Find a proof for GOAL given INPUT such that the value X in GOAL is as high as possible and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments,  where the argument X is a numerical variable.
-% INPUT should be a list of zero or more atomic formulas.
-% Note: A set of numerical constants should be defined for any variables that are exogenous in the theory or in INPUT.
-
-% showMaxValue(RESULT, OPTION). 
-% Prints the results obtained from maxValue(X, GOAL, INPUT, RESULT) to the console.
-% OPTION should be one of the following: monochrome, color, lanes
-
-% Usage examples:
-% tutorialExamples.pl
-% emotionExample.pl
-% psychopharmacologyExample.pl
-% sourceMemoryExample.pl
-% substanceMisuseExample.pl
-
-
 maxValue(Y, G, I, R):-
 	findall(
     	Y,
@@ -162,23 +108,6 @@ showMaxValue(R, O):-
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % MINVALUE
 
-% minValue(X, GOAL, INPUT, RESULT). 
-% Find a proof for GOAL given INPUT such that the value X in GOAL is as low as possible and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments, where the argument X is a numerical variable.
-% INPUT should be a list of zero or more atomic formulas.
-% Note: A set of numerical constants should be defined for any variables that are exogenous in the theory or in INPUT.
-
-% showMinValue(RESULT, OPTION). Prints the results obtained from minValue(X, GOAL, INPUT, RESULT) to the console.
-% OPTION should be one of the following: monochrome, color, lanes
-
-% Usage examples:
-% tutorialExamples.pl
-% emotionExample.pl
-% sourceMemoryExample.pl
-% substanceMisuseExample.pl
-% psychopharmacologyExample.pl
-
-
 minValue(Y, G, I, R):-
 	findall(
     	Y,
@@ -200,22 +129,6 @@ showMinValue(R, O):-
 
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % INCOHERENCE
-
-% incoherence(GOAL1, GOAL2, INPUT, THRESHOLD, X1, X2, RESULT). 
-% Check if GOAL1 and GOAL2 differ with respect to their numerical values X1 and X2, more than THRESHOLD given INPUT.  Unify the result with RESULT.
-% GOAL1 and GOAL2 should be atomic formulas that each contain a numerical variable; for example X1 and X2, respectively.
-% INPUT should be a list of zero or more atomic formulas.
-% THRESHOLD should be a number (integer or real).
-% X1 and X2 are the numerical variables in GOAL1 and GOAL2.
-
-% showIncoherence(RESULT, OPTION). 
-% Print the results obtained from incoherence(INPUT, GOAL1, GOAL2, THRESHOLD, X1, X2, RESULT) to the console.
-% OPTION should be one of the following: monochrome, color, lanes
-
-% Usage examples:
-% tutorialExamples.pl
-% phobiaExample.pl
-
 
 incoherence(G1, G2, I, T, X1, X2, R):-
 	provable0(G1, I),
@@ -245,18 +158,6 @@ showIncoherence(R, O):-
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % FALSIFIABILITY
 
-% falsifiability(GOAL, INPUT, RESULT). 
-% Count the number of unique predictions with respect to GOAL given INPUT and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments.
-% INPUT should be a list of zero or more atomic formulas.
-
-% showFalsifiability(RESULT). Prints the results of falsifiability(GOAL, INPUT, RESULT) to the console.
-
-% Usage examples:
-% tutorialExamples.pl
-% distanceExample.pl
-
-
 falsifiability(G, I, R):-
 	findall(G, provable0(G, I), L),
 	sort(L, L0),
@@ -278,21 +179,6 @@ showFalsifiability(R):-
 
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % SUBSUMES
-
-% subsumes(SUPERTHEORY, SUBTHEORY, GOAL, INPUT, RESULT). 
-% Check if SUPERTHEORY subsumes SUBTHEORY with respect to GOAL given INPUT and unify the result with RESULT.
-% GOAL should be an atomic formula with constants, variables or functions as arguments.
-% SUPERTHEORY and SUBTHEORY should be atomic formulas
-% INPUT should be a list of zero or more atomic formulas.
-% Note: Clauses that belong to SUPERTHEORY should have SUPERTHEORY in their antecedent; clauses that belong to 
-%  SUBTHEORY should have SUBTHEORY in their antecedent. INPUT should not contain SUPERTHEORY and SUBTHEORY.
-
-% showSubsumes(RESULT). Prints the results from subsumes(SUPERTHEORY, SUBTHEORY, GOAL, INPUT, RESULT) to the console.
-
-% Usage examples:
-% tutorialExamples.pl
-% distanceExample.pl
-
 
 subsumes(SUPER, SUB, G, I, R):-
 	append(I, [SUPER], ISUPER),
@@ -317,6 +203,121 @@ showSubsumes(R):-
 
 
 % -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% ALL CLAUSES
+
+allClauses(G, I, R):-
+    findall(
+        c(G, A),
+        (
+            clause(G, A),
+            provable0(A, I)
+        ),
+        R
+    ).
+
+showAllClauses(R):-    
+    formatOutputTerm(R, R1), 
+    maplist(clauseToFolSyntax, R1, R2),
+    nl, writeln('ALL CLAUSES'), nl,
+    maplist(writeln, R2).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% GENERATE RANDOM OBJECTS
+
+generateRandomObjects(NF, NS, PN, R):- 
+    randset(NS, NF, L),
+    findall(
+        X, 
+        (
+            member(X1, L), 
+            atomic_list_concat([PN, '(', X1, ')'], X)
+        ),
+        L1
+    ),
+    maplist(term_string, R, L1).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% SAMPLE CLAUSES
+
+sampleClauses(G, I, N, SP, R):-
+    SP = [],
+    findall(
+        c(G, A),
+        (
+            clause(G, A),
+            provable0(A, I)
+        ),
+        L
+    ),
+    length(L, NT),
+    randomSampleFromList(N, L, S),
+    R = [NT, S].
+
+sampleClauses(G, I, N, SP, R):-
+    SP \= [],
+    maplist(getGroundings(I), SP, GSP),
+    getStrataDefinitions(GSP, SD),
+    maplist(makeStratum(G, I), SD, STRA),
+    maplist(length, STRA, NSSTRA),
+    sum_list(NSSTRA, NCLA),
+    maplist(randomSampleFromList(N), STRA, SSTRA),
+    flatten(SSTRA, SSTRA2),
+    R = [NCLA, SD, SSTRA2].
+
+showSampleClauses(R):-    
+    R = [NT, R1],
+    maplist(formatOutputTerm, R1, R2),
+    maplist(clauseToFolSyntax, R2, R3),
+    nl, writeln('SAMPLE CLAUSES'), nl,
+    write('The total number of clauses is '), write(NT), nl, nl,
+    write('Simple random sample of clauses:'), nl,
+    maplist(writeln, R3).
+
+showSampleClauses(R):-
+    R = [NCLA, SD, SSTRA],
+    nl, writeln('SAMPLE CLAUSES'), nl,
+    write('The total number of clauses is '), writeln(NCLA), nl,
+    writeln('Strata definitions:'),
+    maplist(writeln, SD), nl,
+    maplist(formatOutputTerm, SSTRA, SSTRA1),
+    maplist(clauseToFolSyntax, SSTRA1, SSTRA2),
+    writeln('Stratified random sample of clauses:'),
+    maplist(writeln, SSTRA2).
+
+getGroundings(I, G, L):-
+    findall(G, provable0(G, I), L).
+
+getStrataDefinitions(GSP, SD):-
+    GSP = [L],
+    findall([X], member(X, L), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2],
+    findall([X1, X2], (member(X1, L1), member(X2, L2)), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2, L3],
+    findall([X1, X2, X3], (member(X1, L1), member(X2, L2), member(X3, L3)), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2, L3, L4],
+    findall([X1, X2, X3, X4], (member(X1, L1), member(X2, L2), member(X3, L3), member(X4, L4)), SD).
+
+makeStratum(G, I, SD, STRM):-
+    SD = [STR],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2, STR3],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A), inBody(STR3, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2, STR3, STR4],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A), inBody(STR3, A), inBody(STR4, A)),STRM).
+
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % UTILITY PREDICATES
 
 writeNTabs(N):- findall('     ', between(1, N, _), L), maplist(write, L).
@@ -330,3 +331,36 @@ parse_arg(I, O):- float(I), format(atom(O), '~3f', [I]).
 parse_arg(I, O):- integer(I), O = I.
 parse_arg(I, O):- \+number(I), \+compound(I), O = I.
 parse_arg(I, O):- compound(I), I =.. L, maplist(parse_arg, L, L1), O =.. L1.
+
+inBody(X, B):- B = ','(B1, B2), (inBody(X, B1); inBody(X, B2)).
+inBody(X, B):- B = ';'(B1, B2), (inBody(X, B1); inBody(X, B2)).
+inBody(X, B):- X = B.
+inBody(X, B):- \+(X) = B.
+
+clauseToFolSyntax(I, O):-
+    I = c(C, A),
+    antecedentToFolSyntax(A, A1),
+    O1 = (C ⇐ A1),
+    termToString(O1, O2),
+    stringReplace('∧', ' ∧ ', O2, O3),
+    stringReplace('∨', ' ∨ ', O3, O4),
+    stringReplace('⇐', ' ⇐ ', O4, O).
+
+antecedentToFolSyntax(I, O):- I = ','(I1, I2), antecedentToFolSyntax(I1, O1), antecedentToFolSyntax(I2, O2), O = ∧(O1, O2).
+antecedentToFolSyntax(I, O):- I = ';'(I1, I2), antecedentToFolSyntax(I1, O1), antecedentToFolSyntax(I2, O2), O = ∨(O1, O2).
+antecedentToFolSyntax(I, O):- I = \+(I1), O = ¬(I1).
+antecedentToFolSyntax(I, O):- I \= ','(_, _), I \= ';'(_, _), I \= \+(_), O = I.
+
+termToString(I, O):-
+    term_string(I, O, [numbervars(true)]).
+
+stringReplace(IS, OS, I, O) :-
+    atomic_list_concat(L, IS, I),
+    atomic_list_concat(L, OS, O).
+
+randomSampleFromList(N, I, O):-
+    length(I, NI),
+    randset(N, NI, RS),
+    maplist(pickNthFromList(I), RS, O).
+
+pickNthFromList(L, N, O):- nth1(N, L, O).

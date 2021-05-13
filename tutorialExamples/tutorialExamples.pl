@@ -159,3 +159,82 @@ q7 ⇐    GOAL = anchestor(_, _)
     ∧ SUBTHEORY = source(theoryA)
     ∧ subsumes(SUPERTHEORY, SUBTHEORY, GOAL, INPUT, RESULT)
     ∧ showSubsumes(RESULT).
+
+
+% ---------------------------------------------------------------------------------------------------------------------
+% ALL CLAUSES
+
+% Example 8
+
+age(young).
+age(middle).
+age(old).
+
+gender(female).
+gender(male).
+
+nationality(american).
+nationality(italian).
+
+person(A, G, N) ⇐ age(A) ∧ gender(G) ∧ nationality(N). 
+
+q8 ⇐    GOAL = person(_, _, _)
+    ∧ INPUT = []
+    ∧ allClauses(GOAL, INPUT, RESULT)
+    ∧ showAllClauses(RESULT).
+
+
+% ---------------------------------------------------------------------------------------------------------------------
+% GENERATE RANDOM OBJECTS
+
+% Example 9
+
+q9 ⇐    FRAMESIZE = 1000
+    ∧ SAMPLESIZE = 5
+    ∧ PREDICATENAME = human
+    ∧ generateRandomObjects(FRAMESIZE, SAMPLESIZE, PREDICATENAME, RESULT)
+    ∧ write(RESULT).
+
+
+% ---------------------------------------------------------------------------------------------------------------------
+% SAMPLE CLAUSES
+
+% Example 10
+
+size(small).
+size(medium).
+size(large).
+
+color(red).
+color(blue).
+color(yellow).
+color(green).
+color(black).
+color(white).
+
+type(sphere).
+type(cube).
+type(cylinder).
+
+object(S, C, T) ⇐ size(S) ∧ color(C) ∧ type(T).
+
+q10 ⇐    GOAL = object(_, _, _)
+    ∧ INPUT = []
+    ∧ N = 8
+    ∧ STRATIFY = []
+    ∧ sampleClauses(GOAL, INPUT, N, STRATIFY, RESULT)
+    ∧ showSampleClauses(RESULT).
+
+q11 ⇐    GOAL = object(_, _, _)
+    ∧ INPUT = []
+    ∧ N = 3
+    ∧ STRATIFY = [type(_)]
+    ∧ sampleClauses(GOAL, INPUT, N, STRATIFY, RESULT)
+    ∧ showSampleClauses(RESULT).
+
+q12 ⇐    GOAL = object(_, _, _)
+    ∧ INPUT = []
+    ∧ N = 3
+    ∧ STRATIFY = [size(_), type(_)]
+    ∧ sampleClauses(GOAL, INPUT, N, STRATIFY, RESULT)
+    ∧ showSampleClauses(RESULT).

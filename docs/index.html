@@ -19,7 +19,7 @@
     .w3-tag, .fa {cursor:pointer}
     .w3-tag {height:15px;width:15px;padding:0;margin-top:6px} 
     
-    .w3-container {line-height: 150%;} 
+    .w3-container {line-height: 150%;}
     h3 {padding-top: 20px;}
     h4 {padding-top: 10px;} 
     
@@ -29,6 +29,7 @@
         background-color: rgb(227, 236, 238);
         padding: 2px;
         font-size: 90%;
+        white-space: nowrap;
     }
     
     code {
@@ -46,7 +47,7 @@
 
     symbolic {
         font-family: "Georgia", Times, serif;
-        /* font-weight: bold; */
+        font-weight: bold;
         white-space: nowrap;
     }
 
@@ -61,6 +62,10 @@
     }
     /* Använd med <div class=zoom><div> */
 
+    ul {
+        list-style-type: square;
+    }
+
 </style>
 
 
@@ -72,9 +77,9 @@
     <div class="w3-top">
         <div class="w3-row w3-large w3-blue-grey">
         <div class="w3-col s2">
-            <a href="#" class="w3-button w3-block">Home</a>
+            <a href="#" class="w3-button w3-block"><b>Home</b></a>
         </div>
-        <div class="w3-col s2">
+        <div class="w3-col s3">
             <a href="#abstract" class="w3-button w3-block">Abstract</a>
         </div>
         <div class="w3-col s2">
@@ -83,7 +88,7 @@
         <div class="w3-col s2">
             <a href="#credits" class="w3-button w3-block">Credits</a>
         </div>
-        <div class="w3-col s2">
+        <div class="w3-col s3">
             <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2" target="_blank" class="w3-button w3-block"><i class="fa fa-github w3-margin-right"></i>GitHub Repo</a>
         </div>
         </div>
@@ -118,7 +123,8 @@
                 first order predicate logic, one of the most powerful formal languages that exist. Such a representation 
                 includes any background assumptions, the meaning of events, and how events are qualitatively and 
                 quantitatively related. In fact, any currently known computation can be expressed in a
-                logic program (we use Prolog which is Turing complete). <br><br>
+                logic program (we use Prolog which is Turing complete). 
+                Theory Toolbox 2 also helps you plan empirical studies that are representative with respect to a theory.
             </p>
         </div>
         <div class="w3-col l3 m6 w3-blue w3-container w3-padding-16">
@@ -128,7 +134,7 @@
                 that have to be true if the premises in the theory are true. Such conclusions come in the form of 
                 semantic information and/or quantitative information. Theory Toolbox 2 also explains why a certain 
                 conclusions is entailed by a theory by showing all the inferential steps that lead up to the conclusion,
-                including any steps that involve numerical computations.<br><br>
+                including any steps that involve numerical computations.<br><br><br><br>
             </p>
         </div>
         <div class="w3-col l3 m6 w3-blue-grey w3-container w3-padding-16">
@@ -137,7 +143,7 @@
                 When the system of equations in a theory has a unique solution, this solution is shown in any conclusions and proofs
                 that are derived from the theory. In case there are multiple unknowns, it is also possible to perform a search for a 
                 unique solution that maximizes or minimizes a certain variable. And if there are no unique solutions at all, 
-                Theory Toolbox 2 shows a proof with a symbolic solution.<br><br><br><br>
+                Theory Toolbox 2 shows a proof with a symbolic solution.<br><br><br><br><br><br>
             </p>
         </div>
         <div class="w3-col l3 m6 w3-teal w3-container w3-padding-16 w3">
@@ -147,7 +153,7 @@
                 Independently of what empirical observations show, is a theory a good one? 
                 With Theory Toolbox 2 it is possible to check whether a theory is internally coherent (not self contradictory),
                 measure how general it is and check whether it subsumes another theory (it makes all the 
-                predictions that another theory makes and more). <br>
+                predictions that another theory makes and more). <br><br><br>
             </p>
         </div>
     </div>
@@ -162,10 +168,11 @@
     <div class="w3-container">
 
         <p>
-            Below you can find a written guide to logic programming, theory representation and inference with Theory Toolbox. 
+            Below you can find a written guide to logic programming, theory representation and inference with Theory Toolbox 2. 
             <a href="https://doi.org/10.1016/j.newideapsych.2020.100838" target="_blank">Rohner and Kjellerstrand (2021)</a> 
-            contains a theoretical discussion of theory representation in psychology; this web page contains
-            the documentation for Theory Toolbox 2.
+            contains a theoretical discussion of theory representation in psychology. This webpage is a living document;
+            if you find and problems or have suggestions for improvement please post an
+            <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/issues" target="_blank">issue</a>.
         </p>
         
         <!-- Overview -->
@@ -173,11 +180,11 @@
         <h3>1. Overview</h3>
         <p> 
             <ul>
-                <li>Section 2 explains how to install SWI Prolog and Theory Toolbox 2, and how to run some examples.</li>
+                <li>Section 2 explains how to install SWI Prolog and Theory Toolbox 2 and how to run some examples.</li>
                 <li>Section 3 gives a quick introduction to logic programming.</li>
                 <li>Section 4 explains some basic principles for designing scientific theories.</li>
                 <li>Section 5 discusses the advantages of logic programming with respect to theory representation.</li>
-                <li>Section 6 shows how to use Theory Toolbox 2 for inference, explanation and theory evaluation.</li>
+                <li>Section 6 shows how to use Theory Toolbox 2 for inference, explanation, theory evaluation and theory construction.</li>
             </ul>
         </p>
 
@@ -261,27 +268,34 @@
         <p>
             To use the toolbox on your own theory
             <ol>
-                <li>Create a text file (UTF-8 with BOM encoding) with the file extension <incode>.pl</incode> and write the following at 
-                the top of this file: <incode>:-include('theoryToolbox2.pl').</incode> Your file has to be in the same directory as theoryToolbox2.pl 
-                (alternatively you can modify the include directory to point to another directory that contains theoryToolbox2.pl).</li>
-                <li>Open the file in Visual Studio Code and run a query (as described under 6 above).</li>
+                <li>In Visual Studio Code, go to the File menu and click New File</li>
+                <li>When the file opens, click on Select Language and choose Prolog</li>
+                <li>Write the following at the top of this file: <incode>:-include('theoryToolbox2.pl').</incode></li>
+                <li>Save your file with a .pl extension. Your file has to be in the same directory as theoryToolbox2.pl 
+                    (alternatively you can modify the include directory to point to another directory that contains theoryToolbox2.pl).
+                </li>
+                <li>Make sure that your file is saved with UTF-8 with BOM encoding (you can set this in the lower right part of the window in Visual Studio Code)</li>
+                <li>Write your theory</li>
             </ol>
-            <p>The include directive</p>
+        </p>
+
+        <p>
+            The directive <incode>:-include('theoryToolbox2.pl').</incode>
             <ul>
                 <li>Enables the use of clpr predicates (explained below).</li>
                 <li>Enables the use of symbols from classic logic: <incode>∧</incode>, <incode>∨</incode>, <incode>⇐</incode>, <incode>¬</incode> (in theoryToolbox2.pl 
                     these are defined as operators and term_expansion/2 and goal_expansion/2 are used to replace them with 
                     standard Prolog operators).</li>
                 <li>Enables the following Theory Toolbox 2 predicates: provable/3, prove/3, maxValue/4,
-                    minValue/4, incoherence/7, falsifiability/3, subsumes/5 (the number 
-                    indicates the number of arguments in the predicate).
+                    minValue/4, incoherence/7, falsifiability/3, subsumes/5, allClauses/3, generateRandomObjects/4,
+                    and sampleClauses/5 (the number indicates the number of arguments in the predicate).
             </ul>
         </p>
 
 
         <!-- Syntax and Semantics of Logic Programs -->
 
-        <h3 id="section3">3. Syntax and Semantics of Logic Programs</h3>
+        <h3>3. Syntax and Semantics of Logic Programs</h3>
         
         <h4>3.1. Atomic Formulas</h4>
         <p>
@@ -360,8 +374,13 @@
         </p>
         <p>Clauses with a non empty antecedent usually contain variables, and they therefore describe general relations. 
             For example, <incode>aunt(A, C) ⇐ sister(A, M) ∧ parent(M, C)</incode> means that the aunt relation holds for any
-            A, C and M. The scope of a variable is the clause in which it appears. This means that same named variables in a clause have 
-        to be instantiated with the same constant (between clauses same named variables can be instantiated with different constants).</p>
+            A, C and M; i.e. variables are (implicitly) universally quantified. The scope of a variable is the clause in which it appears. 
+            This means that same named variables in a clause have 
+            to be instantiated with the same constant (between clauses same named variables can be instantiated with different constants).
+            So for example, <incode>sister(A, marge)</incode> and <incode>parent(marge, C)</incode> would both have to hold in order
+            for the antecedent <incode>sister(A, M) ∧ parent(M, C)</incode> to hold (note that <incode>M</incode> could replaced 
+            with <incode>marge</incode> in both cases).
+        </p>
         <p>
             Consider another example that mixes qualitative and quantitative relations, shown in Figure 2. In the example we use an event predicate
             with a subject, a verb, an object and a probability value. In addition to stating that h1 is a human, that heroin is an opiate and so on, it also says that,
@@ -500,16 +519,48 @@
                 available on their computer (the local version of the theory is synchronized to the online one); (4) members of the team can instantly
                 run queries on the latest version of the theory (e.g. using Theory Toolbox 2).
             </li>
+            <li>
+                <b>Plan Representative Empirical Studies.</b> Finding out how the probabilities of different events are functionally related
+                depends on induction from a set of empirical observations, e.g. with logistic regression. And empirical studies in turn depend on having
+                a preliminary theory that defines relevant domains. Theory Toolbox 2 can generate a plan for an empirical study that is representative 
+                with respect to a theory (e.g. if a theory is about arithmetic performance, a plan for an empirical study should randomly 
+                sample from the universe of all relevant integers and all relevant operations on these integers).
+            </li>
         </ul>
 
 
         <!-- Using Theory Toolbox -->
 
         <h3>6. Using Theory Toolbox 2</h3>
+        <h4>6.1. Introduction</h4>
         <p>
-            This section is an introductory users guide to the predicates in Theory Toolbox 2. It starts with a general discussion 
-            of proof search and then describes each predicate in Theory Toolbox 2.
+            Theory Toolbox 2 is a collection of Prolog predicates for using, evaluating and building scientific theories. Here is 
+            a brief description of what each predicate does. Details and usage examples for each predicate are
+            in sections 6.4. to 6.12.
         </p>
+
+        <dl>
+            <dt><b>Deducing predictions</b></dt>
+            <dd>provable/3: Finds any conclusions that are entailed by a theory.</dd>
+            <dt><b>Generating explanations</b></dt>
+            <dd>prove/3: Finds proofs for any conclusions that are entailed by a theory.</dd>
+            <dd>maxValue/4 and minValue/4: Find proofs such that the value of a numerical variable is maximized/minimized.</dd>
+            <dt><b>Rational theory evaluation</b></dt>
+            <dd>incoherence/7: Checks whether a theory is internally coherent (not self contradictory).</dd>
+            <dd>falsifiability/3: Counts the number of predictions that are entailed by a theory.</dd>
+            <dd>subsumes/5: Checks whether one theory subsumes another theory; i.e. it makes all the predictions that the other theory makes and more.</dd>
+            <dt><b>Planning empirical studies that are representative of a theory</b></dt>
+            <dd>allClauses/3: Finds all clauses with a certain consequent that are entailed by a theory.</dd>
+            <dd>generateRandomObjects/4: Generates random objects of a certain kind.</dd>
+            <dd>sampleClauses/5: Yields a simple random sample or a stratified random sample of all clauses that are entailed by a theory.</dd>
+        </dl>
+        <p>
+            <b>NOTE: </b>Theory Toolbox 2 is experimental software that is in continuous development and provided as-is; so you may encounter various bugs
+            (see <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/LICENSE" target="_blank">the license</a> for more info). 
+            In case you have any questions, feedback or find any problems, please post an 
+            <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/issues" target="_blank">issue</a>.
+        </p>
+        <h4>6.2. Proof Search</h4>
         <p>
             A common feature of the predicates in Theory Toolbox 2 is that they all, in some way or another, 
             deal with the conclusions that are entailed by a theory program. The search for such conclusions starts 
@@ -552,20 +603,20 @@
             And now we finally get to the conditions for when a goal is provable (without going into technical details).
             A goal is provable in each one of the following cases:
             <ol>
-                <li>The goal is true (e.g. as in <incode>{4 = 2 + 2}</incode>, or <incode>{X = 2 + 3, X > 1}</incode>).</li>
+                <li>The goal is true, e.g. as in <incode>{4 = 2 + 2}</incode>, or <incode>{X = 2 + 3, X > 1}</incode>.</li>
                 <li>The goal unifies with the consequent of a clause that has an empty antecedent (when the antecedent is empty the consequent holds unconditionally).</li>
                 <li>The goal unifies with the consequent of a clause whose antecedent is provable (per modus ponens, the consequent holds if the antecedent holds).</li>
                 <li>The goal unifies with a term in INPUT</li>
             </ol>
             But what does INPUT mean? More about that in the next section.
         </p>
-        <h4>6.1. The INPUT argument</h4>
+        <h4>6.3. The INPUT argument</h4>
         <p>
             All of the predicates in Theory Toolbox 2 have an argument called INPUT. INPUT is used to temporarily assert anything that is 
             considered provable <i>in addition</i> to the information in a theory program. Because theories should only contain 
             general statements, they are not supposed to be filled will all the particular instances to which they may be applied. 
             For example, a theory about kinship, should not contain clauses about Homer being the parent of Bart and so on (see Figure 1). 
-            Information that pertains to particular instances should be provided in INPUT instead. The theory, per se, should only contain general statements like 
+            Information about particular instances should be provided in INPUT instead. Per se, the theory should only contain general statements like 
             <incode>grandparent(G, C) ⇐ parent(G, P) ∧ parent(P, C).</incode> . Syntactically, INPUT is a Prolog list, i.e. a comma delimited 
             list of atomic formulas in square brackets. So by writing, for example, 
             <incode>INPUT = [parent(jaqueline, marge), parent(marge, lisa)]</incode>, we declare that these goals are provable 
@@ -578,7 +629,7 @@
             to use a theory. Practical examples in which INPUT is used follow below.
         </p>
 
-        <h4>6.2. provable/3</h4>
+        <h4>6.4. provable/3</h4>
         <p>
             <incode>provable(GOAL, INPUT, RESULT)</incode> queries if <incode>GOAL</incode> is provable given <incode>INPUT</incode> and unifies the result 
             with <incode>RESULT</incode>. In case <incode>GOAL</incode> only contains constans, 
@@ -637,7 +688,7 @@
             </ul>
         </p>
 
-        <h4>6.3. prove/3</h4>
+        <h4>6.5. prove/3</h4>
         <p>
             <incode>prove(GOAL, INPUT, RESULT)</incode> finds a proof for <incode>GOAL</incode> given <incode>INPUT</incode> and unifies 
             the result with <incode>RESULT</incode>. In case <incode>GOAL</incode> is not provable, the result is <incode>false</incode>.
@@ -692,7 +743,7 @@
             </ul>
         </p>
 
-        <h4>6.4. maxValue/4 and minValue/4</h4>
+        <h4>6.6. maxValue/4 and minValue/4</h4>
         <p>
             <incode>maxValue(X, GOAL, INPUT, RESULT)</incode> finds a proof for <incode>GOAL</incode> given <incode>INPUT</incode>, such that the 
             value <incode>X</incode> in <incode>GOAL</incode> is as high as possible; the result is unified with <incode>RESULT</incode>.
@@ -701,7 +752,8 @@
                 <li><incode>GOAL</incode> should be an atomic formula with constants, variables or functions as arguments,  where the argument <incode>X</incode> is a numerical variable.</li>
                 <li><incode>INPUT</incode> should be a list of zero or more atomic formulas.</li>
             </ul>
-            Note: Exogenous numerical variables, i.e. variables that do not appear as dependens in any theory equation, should be unified with a set of numerical constants in the theory or in INPUT.
+            Note: Exogenous numerical variables, i.e. variables that do not appear as dependens in any theory equation, 
+            should be unified with a set of numerical constants in the theory or in INPUT.
         </p>
         <p>
             <incode>showMaxValue(RESULT, OPTION)</incode> prints the results obtained from <incode>maxValue(X, GOAL, INPUT, RESULT)</incode> to the console.
@@ -715,7 +767,7 @@
         </p>
         <p>
             Figure 7 shows maxValue/4 applied to a toy example. In the theory (to the left) note that we assign a set of alternative values to 
-            exogenous numerical variables; i.e. numerical variables that do not appear as dependents in any theory equation. This means that the numerical
+            exogenous numerical variables (numerical variables that do not appear as dependents in any theory equation). This means that the numerical
             variable associated with profit (<incode>X1</incode>), for example, can take on all values that result from using 0, 5 and 10 in the theory equations.
             In the query, the goal contains the variable <incode>X</incode>. Note that <incode>X</incode> also appears in <incode>maxValue(X, GOAL, INPUT, RESULT)</incode> further down. 
             This tells maxValue/4 that it is the value of <incode>X</incode> we want to maximize.
@@ -731,20 +783,23 @@
             <img src="figure7.png" style="width:100%">
         </p>
         <p>
-            Figure 8 shows an example in which maxValue/4 is applied to <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/theoryExamples/substanceMisuseExample.pl" target="_blank">
-            substanceMisuseExample.pl</a>. The goal corresponds to "somebody eats unhealthy at time 6 with probability X".
-            A proof which is such that the value of <incode>X</incode> is high is relevant here, because it contains an explanation for a problem (eating unhealthy)
-            which we can use to devise a solution.
-            <incode>INPUT</incode> contains <incode>source(_)</incode>, which assumes that any source holds, because an anonymous variable unifies with anything
-            (e.g. <incode>theoryOfPlannedBehavior</incode>, <incode>operantLearning</incode> and so on, see the theory).
-            <incode>INPUT</incode> also contains <incode>exogenousEvent(_, _, _, _, 0.1)</incode> and <incode>exogenousEvent(_, _, _, _, 0.9)</incode>.
-            This assumes that <i>any</i> exogenous event holds with a probability of 0.1, and that <i>any</i> exogenous event holds with probability 0.9.
-            The reason for assigning values in these predicates is that they contain equations for exogenous variables (variables that do not appear as dependents in any theory equation).
-            <incode>INPUT</incode> also contains an atom <incode>misuse(eatUnhealthy)</incode>. This allows 
-            the theory to be applied to this behavior as well (eating unhealthy was not defined as a misuse behavior in the background clauses).
+            Figure 8 shows an example in which maxValue/4 is applied to 
+            <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/theoryExamples/substanceMisuseExample.pl" target="_blank">
+            substanceMisuseExample.pl</a>. The goal corresponds to "somebody eats unhealthy at time 6 with probability X". Finding a proof that maximizes the value 
+            of <incode>X</incode> is relevant in this case, because it contains an explanation for a problem (why the probability of eating unhealthy is high).
+            <incode>INPUT</incode> then contains a number of things. First, <incode>source(_)</incode> assumes that any source holds
+            (an anonymous variable unifies with anything, in this case e.g. <incode>theoryOfPlannedBehavior</incode>, 
+            <incode>operantLearning</incode> and so on, see the theory). Secondly, <incode>exogenousEvent(_, _, _, _, 0.1)</incode> and 
+            <incode>exogenousEvent(_, _, _, _, 0.9)</incode> assume that any exogenous event holds with probability 0.1 or 0.9. 
+            The reason for assigning values in these predicates is that, in the theory, their equations have independent variables that are exogenous 
+            (variables that do not appear as dependents in any theory equation). Third, <incode>misuse(eatUnhealthy)</incode> allows the theory 
+            to be applied to this behavior as well (eating unhealthy was not defined as a misuse behavior in the background clauses). Finally,
+            <incode>INPUT</incode> contains the other prerequisites defined in the INPUT section of the theory.
         </p>
         <p> The output contains a proof which is such that values of exogenous variables maximize the numerical argument <incode>X</incode> in the goal. 
-            Note how these values then propagate in the systems of equations that lead up to <incode>X</incode>.
+            Note how these values then propagate in the systems of equations that lead up to <incode>X</incode>. For example, we can see that some of the 
+            explanations for eating unhealthy are that a person believes that eating unhealthy causes pleasure and believes that eating unhealthy does
+            not cause physical harm.
         </p>
         <p>
             <b>Figure 8. maxValue/4 used  on the Substance Misuse Example</b>
@@ -763,7 +818,7 @@
             </ul>
         </p>
 
-        <h4>6.5. incoherence/7</h4>
+        <h4>6.7. incoherence/7</h4>
         <p>
             <incode>incoherence(GOAL1, GOAL2, INPUT, THRESHOLD, X1, X2, RESULT)</incode> checks if <incode>GOAL1</incode> and 
             <incode>GOAL2</incode> differ with respect to their numerical values <incode>X1</incode> and <incode>X2</incode>, 
@@ -816,7 +871,7 @@
             </ul>
         </p>
 
-        <h4>6.6 falsifiability/3</h4>
+        <h4>6.8. falsifiability/3</h4>
         <p>
             <incode>falsifiability(GOAL, INPUT, RESULT)</incode> counts the number of unique predictions with respect to 
             <incode>GOAL</incode> given <incode>INPUT</incode> and unifies the result with <incode>RESULT</incode>.
@@ -862,7 +917,7 @@
             </ul>
         </p>
 
-        <h4>6.7. subsumes/5</h4>
+        <h4>6.9. subsumes/5</h4>
         <p>
             <incode>subsumes(SUPERTHEORY, SUBTHEORY, GOAL, INPUT, RESULT)</incode> checks if <incode>SUPERTHEORY</incode>
             subsumes <incode>SUBTHEORY</incode> with respect to <incode>GOAL</incode> given <incode>INPUT</incode> and 
@@ -880,7 +935,7 @@
             <incode>showSubsumes(RESULT)</incode> prints the results from <incode>subsumes(SUPERTHEORY, SUBTHEORY, GOAL, INPUT, RESULT)</incode> to the console.
         </p>
         <p>
-            Figure 13 shows a toy example in which subsumes/5 is used. The goal means "the objects for which the anchestor relation can be deduced".
+            Figure 13 shows a toy example in which subsumes/5 is used. The goal means "the objects for which the anchestor relation holds".
             Theory B subsumes theory A because in theory B, an ancestor is either somebody's parent or somebody's grandparent.
         </p>
         <p>
@@ -912,6 +967,122 @@
             </ul>
         </p>
 
+        <h4>6.10. allClauses/3</h4>
+        <p>
+            <incode>allClauses(GOAL, INPUT, RESULT)</incode> generates all clauses that have the consequent <incode>GOAL</incode> and that hold
+            given <incode>INPUT</incode>; results are unified with <incode>RESULT</incode>.
+            <ul>
+                <li><incode>GOAL</incode> should be an atomic formula with constants, variables or functions as arguments.</li>
+                <li><incode>INPUT</incode> should be a list of zero or more atomic formulas.</li>
+            </ul>
+        </p>
+        <p>
+            <incode>showAllClauses(RESULT)</incode> prints the results obtained from <incode>allClauses(GOAL, INPUT, RESULT)</incode>.
+        </p>
+        <p>
+            Figure 15 shows a toy example. The goal denotes a person with three properties; according to the theory these are age, gender 
+            and nationality. The output (in the right part of Figure 15) shows all clauses that hold for this goal.
+        </p>
+        <p>
+            <b>Figure 15. allClauses/3 Used on a Toy Example</b>
+        </p>
+        <p>
+            <img src="figure15.png" style="width:100%">
+        </p>
+        <p>
+            Examples in which allClauses/3 is used are:
+            <ul>
+                <li><a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/tutorialExamples/tutorialExamples.pl" target="_blank">tutorialExamples.pl</a></li>
+            </ul>
+        </p>
+
+        <h4>6.11. generateRandomObjects/4</h4>
+        <p>
+            <incode>generateRandomObjects(FRAMESIZE, SAMPLESIZE, PREDICATENAME, RESULT)</incode> generates a list <incode>RESULT</incode> of length 
+            <incode>SAMPLESIZE</incode> containing atomic formulas with predicate name <incode>PREDICATENAME</incode> and 
+            random integers in the range 1 to <incode>FRAMESIZE</incode> as the argument.
+            <ul>
+                <li><incode>FRAMESIZE</incode> and <incode>SAMPLESIZE</incode> should be integers such that <incode>FRAMESIZE</incode> > <incode>SAMPLESIZE</incode>.</li>
+                <li><incode>PREDICATENAME</incode> should be a textual constant.</li>
+            </ul>
+        </p>
+        <p>
+            An example with generateRandomObjects/4 is shown in Figure 16. Five random objects are sampled from all objects in the range 1 - 1000.
+        </p>
+        <p>
+            <b>Figure 16. generateRandomObjects/4 Used on a Toy Example</b>
+        </p>
+        <p>
+            <img src="figure16.png" style="width:100%">
+        </p>
+        <p>
+            Examples in which generateRandomObjects/3 is used are:
+            <ul>
+                <li><a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/tutorialExamples/tutorialExamples.pl" target="_blank">tutorialExamples.pl</a></li>
+            </ul>
+        </p>
+
+        <h4>6.12. sampleClauses/5</h4>
+        <p>
+            <incode>sampleClauses(GOAL, INPUT, N, STRATIFY, RESULT)</incode> randomly samples <incode>N</incode> clauses from each stratum 
+            defined in <incode>STRATIFY</incode>, where all strata have the consequent <incode>GOAL</incode> and hold given <incode>INPUT</incode>. 
+            Unify the result with <incode>RESULT</incode>.
+            <ul>
+                <li><incode>GOAL</incode> should be an atomic formula with constants, variables or functions as arguments</li>
+                <li><incode>INPUT</incode> should be a list of atomic formulas</li>
+                <li><incode>N</incode> should be an integer</li>
+                <li><incode>STRATIFY</incode> should be an empty list or a list of atomic formulas</li>
+            </ul>
+            Note: If <incode>STRATIFY</incode> is an empty list, the result is a simple random sample of size <incode>N</incode> (without stratification).
+            Otherwise, strata are all combinations of all groundings of the atomic formulas in <incode>STRATIFY</incode>. 
+            E.g. if <incode>STRATIFY = [p(_), q(_)]</incode>, and the groundings of <incode>p(_)</incode> and <incode>q(_)</incode> are 
+            <incode>p(a)</incode>, <incode>p(b)</incode>, <incode>q(c)</incode> and <incode>q(d)</incode>, strata are <incode>p(a) ∧ q(c)</incode>, 
+            <incode>p(a) ∧ q(d)</incode>, <incode>p(b) ∧ q(c)</incode> and <incode>p(b) ∧ q(d)</incode>. A maximum of 4 stratification predicates can 
+            be used in <incode>STRATIFY</incode>.
+        </p>
+        <p><incode>showSampleClauses(RESULT)</incode> prints the results from <incode>sampleClauses(GOAL, INPUT, N, STRATIFY, RESULT)</incode> to the console.</p>
+        <p>
+            Figure 17 shows a toy example involving sampleClauses/5. In query 12, the goal denotes an object with three properties. We wish to draw a sample of 
+            three clauses from each stratum. <incode>STRATIFY = [size(_), type(_)]</incode> indicates that we want a random sample from each stratum that results by combining
+            all groundings of <incode>size(_)</incode> and <incode>type(_)</incode>. In the output, in the right part of Figure 17, we are given all strata 
+            definitions, followed by a stratified random sample of clauses. Note that three clauses are randomly sampled from each stratum (such that all strata 
+            are represented).  
+        </p>
+        <p>
+            <b>Figure 17. sampleClauses/5 Used on a Toy Example</b>
+        </p>
+        <p>
+            <img src="figure17.png" style="width:100%">
+        </p>
+        <p>
+            A realistic example involving sampleClauses/5 and generateRandomObjects/4 is shown in Figure 18. It is based on 
+            <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/theoryExamples/arithmeticExample.pl" target="_blank">arithmeticExample.pl</a>.
+            The goal denotes whether a person can correctly represent the solution to a certain arithmetic problem (addition, subtraction, multiplication or division
+            as shown in the theory). We then use generateRandomObjects/4 to create a random sample of 16 humans from a population of 
+            1000000. <incode>INPUT1</incode> then defines the atomic formulas that are required according to the input section in the theory. Next, <incode>INPUT1</incode>
+            is appended to the list of humans, resulting in <incode>INPUT2</incode>. We want a random sample of 6 clauses from each stratum defined by
+            <incode>STRATIFY = [human(_), problemType(_)]</incode>; i.e. for each human and for each problem type we want 6 randomly chosen clauses.
+        </p>
+        <p>
+            The output is shown in the right part of Figure 18. Only a subset of strata definitions and sampled clauses are shown for space reasons. By using 
+            sampleClauses/5 and generateRandomObjects/4 it is possible to obtain a representative sample of the population that consists of combinations of 
+            1000000 humans and 400 arithmetic problems (four operations, ten integers, two integers in each operation). 
+        </p>
+        <p>
+            <b>Figure 18. sampleClauses/5 Used on arithmeticExample.pl</b>
+        </p>
+        <p>
+            <img src="figure18.png" style="width:100%">
+        </p>
+        <p>
+            Examples in which sampleClauses/5 is used are:
+            <ul>
+                <li><a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/tutorialExamples/tutorialExamples.pl" target="_blank">tutorialExamples.pl</a></li>
+                <li><a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/theoryExamples/arithmeticExample.pl" target="_blank">arithmeticExample.pl</a></li>
+            </ul>
+        </p>
+
+
 
         <!-- References -->
 
@@ -936,8 +1107,8 @@
     <div class="w3-container">
         <p>
             This project would not have been possible without the kind help of several people. 
-            On the SWI Prolog forum I want to thank Alan B, Anne O, Carlo C, David T, Eric T, Fabrizzion R, Jan W, Paul B, Paulo M and Peter L.
-            On StackOverflow i want to thank Daniel L, @false, @Guy Coder,@lurker, @Mostowski Collapse, @repeat. At my uni I want to thank Martin B and
+            On the SWI Prolog forum I want to thank Alan B, Anne O, Carlo C, David T, Eric T, Fabrizzio R, Jan W, j4n_bur53, Paul B, Paulo M and Peter L.
+            On StackOverflow i want to thank Daniel L, @false, @Guy Coder, @lurker, @Mostowski Collapse, @repeat and @mat. At my uni I want to thank Martin B and
             Erik J O. And a big thanks goes to Håkan K for helping me solve some tricky problems and giving me hands on advice!
         </p>
         <p>
