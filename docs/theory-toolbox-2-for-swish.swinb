@@ -1,0 +1,509 @@
+<div class="notebook hide-navbar open-fullscreen">
+
+<div class="nb-cell html" name="htm1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    html,body,h1,h2,h3,h4,h5 {font-family:"Lato", sans-serif}
+    .header {
+        padding: 26px;
+        background: rgb(97, 125, 138);
+        color: white;
+        font-family:"Lato", sans-serif;
+        width:100%
+    }
+</style>
+
+<div class="header">
+  <table style="width:100%">
+  	<tbody><tr>
+      <td>
+        <span style="font-size: 28px;">
+        	<b>Theory Toolbox <i>Playground</i></b>
+      	</span>
+      </td>
+      <td>
+        <span style="font-size: 14px; float:right">
+        	Powered by <a href="https://swish.swi-prolog.org/" target="_blank" style="color:white; text-decoration:underline;">SWISH</a> and 
+            <a href="https://www.w3schools.com/" target="_blank" style="color:white; text-decoration:underline;">W3 CSS</a>
+        </span>
+      </td>
+    </tr>
+  </tbody></table>
+</div>
+<br>
+
+<p>
+	Welcome to the playground! Below you can write your own theory program and run queries on it with Theory Toolbox 2 predicates 
+  	(so boldly delete the example and build your own queries). If you want you can also use plain Prolog. For more information on how 
+  	to write theories in first order logic and how to use Theory Toolbox 2 see
+  	the <a href="https://jeanchristopherohner.github.io/theory-toolbox-2/" target="_blank" style="color:black; text-decoration:underline;">main page</a>.
+</p>
+<p>
+	<b>NOTE:</b> 
+    <ol>
+        <li>The meta interpreters in this online version can handle CLPR constraints but not other built in Prolog predicates (e.g. member/2, is/2, etc).</li>
+        <li>You do not have to use <code>:-include('theoryToolbox2.pl).</code> in your theory program.</li>
+        <li>This is experimental software so use it at your own risk (see the 
+            <a href="https://github.com/JeanChristopheRohner/theory-toolbox-2/blob/main/LICENSE/" target="_blank" 
+            style="color:black; text-decoration:underline;">license</a> for more information).
+        </li>
+    </ol>
+</p>
+<p>
+	© Jean-Christophe Rohner 2022
+</p>
+
+<script>
+  notebook.cell("p2").hide();
+</script>
+</div>
+
+<div class="nb-cell program" data-background="true" name="p2">
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% INFO
+% Theory Toolbox 2 for SWISH
+
+% © Jean-Christophe Rohner 2021
+% This is experimental software. Use it at your own risk.
+% See the LICENSE file for more information.
+
+% Note that these versions of the meta interpreters do not work with built-in predicates (e.g. is/2, member/2, etc).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% SETUP
+
+:- use_module(library(clpr)).
+:- op(1200, xfx, ⇐).
+:- op(1000, xfy, ∧).
+:- op(1100, xfy, ∨).
+:- op(900, fy, ¬).
+term_expansion(A ⇐ B, A:- B).
+goal_expansion(A ∧ B, (A, B)).
+goal_expansion(A ∨ B, (A; B)).
+goal_expansion(¬A, \+A).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% PROVABLE
+
+provable(G, I, G):- provable0(G, I).
+
+provable0(true, _):- !.
+provable0((G1, G2), I):- !, provable0(G1, I), provable0(G2, I).
+provable0((G1; G2), I):- !, (provable0(G1, I); provable0(G2, I)).
+provable0(G, I):- G = \+(G0), !, \+provable0(G0, I).
+provable0(G, _):- G = {G0}, !, {G0}.
+provable0(G, _):- G = (A = B), !, A = B.
+% To extend the functionality to built-in predicates, such as member/2, add a clause provable0(G, _):- G = member(A, B), !, member(A, B).
+provable0(G, I):- copy_term(I, I1), member(G, I1).
+provable0(H, I):- clause(H, Body), provable0(Body, I).
+
+showProvable(G):- formatOutputTerm(G, G1), format(string(G2), '~w', [G1]), html(div(G2)).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% PROVE
+
+prove(true, _, true):- !.
+prove((G1, G2), I, (P1, P2)):- !, prove(G1, I, P1), prove(G2, I, P2).
+prove((G1; G2), I, (P1; P2)):- !, (prove(G1, I, P1); prove(G2, I, P2)).
+prove(G, I, P):- G = \+(G0), !, \+prove(G0, I, _), P = subproof(¬G0, true).
+prove(G, _, P):- G = {G0}, !, {G0}, P = subproof(G, true).
+prove(G, _, P):- G = (A = B), !, A = B, P = subproof(G, true).
+% To extend the functionality to built-in predicates, such as member/2, add a clause prove(G, _, P):- G = member(A, B), !, member(A, B), P = subproof(G, true).
+prove(G, I, P):- copy_term(I, I1), member(G, I1), P = subproof(G, true).
+prove(H, I, subproof(H, Subproof)):- clause(H, Body), prove(Body, I, Subproof).
+
+proofToHtml(X, SUB, color, OUT):- X = subproof(G, P), P \= true, writeNTabs(SUB, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ '], append(TABS, GA, O1), color(SUB, S), O2 = div(style(S), O1), SUB1 is SUB + 1, proofToHtml(P, SUB1, color, O3), append([O2], O3, OUT).
+proofToHtml(X, SUB, monochrome, OUT):- X = subproof(G, P), P \= true, writeNTabs(SUB, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ '], append(TABS, GA, O1), O2 = div(O1), SUB1 is SUB + 1, proofToHtml(P, SUB1, monochrome, O3), append([O2], O3, OUT).
+proofToHtml(X, SUB, lanes, OUT):- X = subproof(G, P), P \= true, writeNTabs(SUB, lanes, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ '], append(TABS, GA, O1), O2 = div(O1), SUB1 is SUB + 1, proofToHtml(P, SUB1, lanes, O3), append([O2], O3, OUT).
+proofToHtml(X, SUB, O, OUT):- X = ','(A, B), A \= true, B \= true, proofToHtml(A, SUB, O, OUT1), proofToHtml(B, SUB, O, OUT2), append(OUT1, OUT2, OUT).
+proofToHtml(X, SUB, O, OUT):- X = ';'(A, _), A \= true, proofToHtml(A, SUB, O, OUT).
+proofToHtml(X, SUB, O, OUT):- X = ';'(_, B), B \= true, proofToHtml(B, SUB, O, OUT).
+proofToHtml(X, SUB, color, OUT):- X = subproof(G, true), writeNTabs(SUB, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ true'], append(TABS, GA, O1), color(SUB, S), OUT = [div(style(S), O1)].
+proofToHtml(X, SUB, monochrome, OUT):- X = subproof(G, true), writeNTabs(SUB, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ true'], append(TABS, GA, O1), OUT = [div(O1)].
+proofToHtml(X, SUB, lanes, OUT):- X = subproof(G, true), writeNTabs(SUB, lanes, TABS), format(string(G1), '~w', [G]), GA = [G1, ' ⇐ true'], append(TABS, GA, O1), OUT = [div(O1)].
+
+showProof(P, O):- html(p('PROOF')), formatOutputTerm(P, P1), proofToHtml(P1, 0, O, OUT), html(OUT).
+
+color(0, 'color: #BA5400').
+color(1, 'color: #D41200'). 
+color(2, 'color: #7300BF'). 
+color(3, 'color: #0001FF'). 
+color(4, 'color: #007002'). 
+
+color(5, 'color: #BA5400').
+color(6, 'color: #D41200'). 
+color(7, 'color: #7300BF'). 
+color(8, 'color: #0001FF'). 
+color(9, 'color: #007002'). 
+
+color(X, 'color: rgb(1, 1, 1)'):- X > 9.
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% MAX VALUE
+
+maxValue(Y, G, I, R):-
+	findall(
+    	Y,
+      	provable0(G, I),
+      	L
+   ),
+   max_list(L, MAXY),
+   Y = MAXY,
+   prove(G, I, P),
+   R = [P].
+
+showMaxValue(R, O):-
+   [P] = R,
+   html(p('MAX VALUE (PROOF)')),
+   formatOutputTerm(P, P1),
+   proofToHtml(P1, 0, O, OUT),
+   html(OUT).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% MIN VALUE
+
+minValue(Y, G, I, R):-
+	findall(
+    	Y,
+      	provable0(G, I),
+      	L
+   ),
+   min_list(L, MINY),
+   Y = MINY,
+   prove(G, I, P),
+   R = [P].
+
+showMinValue(R, O):-
+   [P] = R,
+   html(p('MIN VALUE (PROOF)')),
+   formatOutputTerm(P, P1),
+   proofToHtml(P1, 0, O, OUT), 
+   html(OUT).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% INCOHERENCE
+
+incoherence(G1, G2, I, T, X1, X2, R):-
+	provable0(G1, I),
+	provable0(G2, I),
+	{abs(X1 - X2) > T}, 
+	R = [I, G1, G2, T],
+	!.
+
+showIncoherence(R, O):-
+	[I, G1, G2, T] = R,
+	html(p('INCOHERENCE')),
+    formatOutputTerm(I, I1),
+	html(p('Given inputs:')), listToDivs(I1, I2), html(I2),
+	html(p(['These goals are incoherent at the threshold ', T, '.'])),
+    html(p('PROOFS')),
+	prove(G1, I, P1), 
+	prove(G2, I, P2),
+    formatOutputTerm(P1, P12),
+    formatOutputTerm(P2, P22),
+	proofToHtml(P12, 0, O, OUT1), html(OUT1),
+    html(p(' ')),
+	proofToHtml(P22, 0, O, OUT2), html(OUT2).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% FALSIBIABILITY
+
+falsifiability(G, I, R):-
+	findall(G, provable0(G, I), L),
+	sort(L, L0),
+	length(L0, N),
+	R = [G, I, N, L].
+   
+showFalsifiability(R):-
+	[G, I, N, L] = R,
+	formatOutputTerm(G, G1),
+	formatOutputTerm(I, I1),
+	formatOutputTerm(L, L1),
+	html(p('FALSIFIABILITY')),
+    html(p('Given inputs:')), listToDivs(I1, I2), html(I2),
+    format(string(G2), '~w', [G1]), html(p(['There are ', N, ' predictions for the goal ', G2])),
+    html(p(['These are: '])), listToDivs(L1, L2), html(L2).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% SUBSUMES
+
+subsumes(SUPER, SUB, G, I, R):-
+	append(I, [SUPER], ISUPER),
+	append(I, [SUB], ISUB),
+	findall(G, provable0(G, ISUPER), LSUPER),
+	findall(G, provable0(G, ISUB), LSUB),
+	sort(LSUPER, LSUPER1),
+	sort(LSUB, LSUB1),
+	subset(LSUB1, LSUPER1),
+	subtract(LSUPER1, LSUB1, EXTRA),
+	R = [SUPER, SUB, G, EXTRA].
+
+showSubsumes(R):-
+	[SUPER, SUB, G, EXTRA] = R,
+	format(string(SUPER2), '~w', [SUPER]),
+    format(string(SUB2), '~w', [SUB]),
+    formatOutputTerm(G, G1), format(string(G2), '~w', [G1]),
+	formatOutputTerm(EXTRA, EXTRA1), listToDivs(EXTRA1, EXTRA2),
+    html(p('SUBSUMES')),
+    html(p(['Given the goal ', G2, ', ', SUPER2, ' subsumes ', SUB2])),
+    length(EXTRA1, N), html(p(['There are ', N, ' predictions in ', SUPER2, ' that are not in ', SUB2, ', namely:'])),
+	html(EXTRA2).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% ALL CLAUSES
+
+allClauses(G, I, R):-
+    findall(
+        c(G, A),
+        (
+            clause(G, A),
+            provable0(A, I)
+        ),
+        R
+    ).
+
+showAllClauses(R):- 
+    html(p('ALL CLAUSES')),
+    maplist(formatOutputTerm, R, R1),
+    maplist(clauseToHtml, R1, H),
+    html(H).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% GENERATE RANDOM OBJECTS
+
+generateRandomObjects(NF, NS, PN, R):- 
+    randset(NS, NF, L),
+    findall(
+        X, 
+        (
+            member(X1, L), 
+            atomic_list_concat([PN, '(', X1, ')'], X)
+        ),
+        L1
+    ),
+    maplist(term_string, R, L1).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% SAMPLE CLAUSES
+
+sampleClauses(G, I, N, SP, R):-
+    SP = [],
+    findall(
+        c(G, A),
+        (
+            clause(G, A),
+            provable0(A, I)
+        ),
+        L
+    ),
+    length(L, NT),
+    randomSampleFromList(N, L, S),
+    R = [NT, S].
+
+sampleClauses(G, I, N, SP, R):-
+    SP \= [],
+    maplist(getGroundings(I), SP, GSP),
+    getStrataDefinitions(GSP, SD),
+    maplist(makeStratum(G, I), SD, STRA),
+    maplist(length, STRA, NSSTRA),
+    sum_list(NSSTRA, NCLA),
+    maplist(randomSampleFromList(N), STRA, SSTRA),
+    flatten(SSTRA, SSTRA2),
+    R = [NCLA, SD, SSTRA2].
+
+showSampleClauses(R):-    
+    R = [NT, R1],
+    maplist(formatOutputTerm, R1, R2),
+    maplist(clauseToHtml, R2, R3),
+    html(p('SAMPLE CLAUSES')),
+    html(p(['The total number of clauses is ', NT])),
+    html(div(['Simple random sample of clauses:'])),
+    html(R3).
+
+showSampleClauses(R):-
+    R = [NCLA, SD, SSTRA],
+    html(p('SAMPLE CLAUSES')),
+    html(p(['The total number of clauses is ', NCLA])),
+    html(div('Strata definitions:')),
+    listToDivs(SD, SD1), html(SD1),
+    maplist(formatOutputTerm, SSTRA, SSTRA1),
+    maplist(clauseToHtml, SSTRA1, SSTRA2),
+    html(div('Stratified random sample of clauses:')),
+    html(SSTRA2).
+
+getGroundings(I, G, L):-
+    findall(G, provable0(G, I), L).
+
+getStrataDefinitions(GSP, SD):-
+    GSP = [L],
+    findall([X], member(X, L), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2],
+    findall([X1, X2], (member(X1, L1), member(X2, L2)), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2, L3],
+    findall([X1, X2, X3], (member(X1, L1), member(X2, L2), member(X3, L3)), SD).
+getStrataDefinitions(GSP, SD):-
+    GSP = [L1, L2, L3, L4],
+    findall([X1, X2, X3, X4], (member(X1, L1), member(X2, L2), member(X3, L3), member(X4, L4)), SD).
+
+makeStratum(G, I, SD, STRM):-
+    SD = [STR],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2, STR3],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A), inBody(STR3, A)), STRM).
+makeStratum(G, I, SD, STRM):-
+    SD = [STR1, STR2, STR3, STR4],
+    findall(c(G, A), (clause(G, A), provable0(A, I), inBody(STR1, A), inBody(STR2, A), inBody(STR3, A), inBody(STR4, A)),STRM).
+
+
+% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% AUXILLIARY PREDICATES
+
+formatOutputTerm(I, O):- I =.. L, maplist(parse_arg, L, L1), I2 =.. L1, copy_term_nat(I2, O), numbervars(O, 0, _).
+
+parse_arg(I, O):- float(I), format(atom(O), '~3f', [I]).
+parse_arg(I, O):- integer(I), O = I.
+parse_arg(I, O):- \+number(I), \+compound(I), O = I.
+parse_arg(I, O):- compound(I), I =.. L, maplist(parse_arg, L, L1), O =.. L1.
+
+inBody(X, B):- B = ','(B1, B2), (inBody(X, B1); inBody(X, B2)).
+inBody(X, B):- B = ';'(B1, B2), (inBody(X, B1); inBody(X, B2)).
+inBody(X, B):- X = B.
+inBody(X, B):- \+(X) = B.
+
+writeNTabs(N, T):- 
+    findall(
+        span(style('color:rgb(255, 255, 255)'), 'xxxx'),
+        between(1, N, _),
+        T
+    ).
+
+writeNTabs(N, lanes, T):- 
+    findall(
+        [span(style('color:rgb(255, 255, 255)'), 'xxxx'), span(style('color:rgb(160, 160, 160)'), '|')],
+        between(1, N, _),
+        T1
+    ),
+    flatten(T1, T).
+
+listToDivs(L, D):-
+    maplist(itemToDiv, L, D1),
+    append(D1, [p('')], D).
+
+itemToDiv(I, O):-
+    format(string(I1), '~w', [I]),
+    O = div(I1).
+
+clauseToHtml(I, O):-
+    I = c(C, A),
+    antecedentToString(A, A1),
+    format(string(C1), '~w', [C]),
+    O = div([C1, ' ⇐ ', A1]).
+
+antecedentToString(I, O):- I = ','(I1, I2), antecedentToString(I1, O1), antecedentToString(I2, O2), string_concat(O1, ' ∧ ', O1I), string_concat(O1I, O2, O).
+antecedentToString(I, O):- I = ';'(I1, I2), antecedentToString(I1, O1), antecedentToString(I2, O2), string_concat(O1, ' ∨ ', O1I), string_concat(O1I, O2, O).
+antecedentToString(I, O):- I = \+(I1), format(string(O), '~w~w', ['¬', I1]).
+antecedentToString(I, O):- I \= ','(_, _), I \= ';'(_, _), I \= \+(_), format(string(O), '~w',[I]).
+
+randomSampleFromList(N, I, O):-
+    length(I, NI),
+    randset(N, NI, RS),
+    maplist(pickNthFromList(I), RS, O).
+
+pickNthFromList(L, N, O):- nth1(N, L, O).
+</div>
+
+<div class="nb-cell html" name="htm2">
+<h3>Theory Program</h3>
+</div>
+
+<div class="nb-cell program" name="p1">
+% NOTES----------------------------------------------------------------------------------------------------------------
+
+% A fictional theory about operant learning and drug use
+
+
+% INPUT----------------------------------------------------------------------------------------------------------------
+
+% human(H)
+% substance(S)
+% event(H, use, S, t1, X)
+% opiate(S) ∨ alchohol(S) ∨ benzodiazepine(S)
+
+% H is a constant
+% S is a constant
+% {X ∈ ℝ | 0 =< X =< 1}
+
+
+% THEORY---------------------------------------------------------------------------------------------------------------
+
+precedes(t1, t2).
+precedes(t2, t3).
+precedes(t3, t4).
+
+event(S, cause, pleasure, 0.99) ⇐ opiate(S).
+event(S, cause, pleasure, 0.77) ⇐ alchohol(S).
+event(S, cause, pleasure, 0.57) ⇐ benzodiazepine(S).
+
+event(H, use, S, T1, X1) ⇐
+	human(H)
+	∧ substance(S)
+	∧ precedes(T2, T1)
+	∧ event(H, use, S, T2, X2)
+	∧ event(S, cause, pleasure, X3)
+	∧ {X1 = X2 * X3}.
+
+
+% EXAMPLE QUERIES------------------------------------------------------------------------------------------------------
+
+q1 ⇐	GOAL = event(_, use, _, t4, _)
+	∧ INPUT = [human(h), substance(heroin), opiate(heroin), event(h, use, heroin, t1, 0.99)]
+	∧ prove(GOAL, INPUT, RESULT)
+	∧ showProof(RESULT, color).
+
+q2 ⇐    GOAL = event(_, use, _, t4, X)
+    ∧ INPUT = [
+        human(h), 
+        substance(S), 
+        opiate(S), 
+        alchohol(S), 
+        benzodiazepine(S),
+        event(h, use, S, t1, 0.1),
+        event(h, use, S, t1, 0.5),
+        event(h, use, S, t1, 0.9)    
+    ]
+    ∧ maxValue(X, GOAL, INPUT, RESULT)
+    ∧ showMaxValue(RESULT, color).
+
+</div>
+
+<div class="nb-cell html" name="htm3">
+<h3>Query</h3>
+</div>
+
+<div class="nb-cell query" data-chunk="10" name="q1">
+q1.
+</div>
+
+</div>
