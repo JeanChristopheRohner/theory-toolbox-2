@@ -484,8 +484,6 @@ q1 ⇐    GOAL = event(_, use, _, t4, X)
         opiate(S), 
         alchohol(S), 
         benzodiazepine(S),
-        event(h, use, S, t1, 0.1),
-        event(h, use, S, t1, 0.5),
         event(h, use, S, t1, 0.9)    
     ]
     ∧ maxValue(X, GOAL, INPUT, RESULT)
