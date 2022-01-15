@@ -477,12 +477,7 @@ event(H, use, S, T1, X1) ⇐
 
 % EXAMPLE QUERIES------------------------------------------------------------------------------------------------------
 
-q1 ⇐	GOAL = event(_, use, _, t4, _)
-	∧ INPUT = [human(h), substance(heroin), opiate(heroin), event(h, use, heroin, t1, 0.99)]
-	∧ prove(GOAL, INPUT, RESULT)
-	∧ showProof(RESULT, color).
-
-q2 ⇐    GOAL = event(_, use, _, t4, X)
+q1 ⇐    GOAL = event(_, use, _, t4, X)
     ∧ INPUT = [
         human(h), 
         substance(S), 
