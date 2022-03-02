@@ -27,7 +27,7 @@ animal(E, X1) ⇐ moves(E, X2) ∧ breathes(E, X3) ∧ speaks(E, X4) ∧ {X1 = X
 thing(E, X1) ⇐ human(E, X2) ∧ animal(E, X3) ∧ {X1 = (1 - X2) * (1 - X3)}.
 
 q1 ⇐    GOAL = (human(E, X1), animal(E, X2), thing(E, X3)),
-    INPUT = [moves(cactus, 0), breathes(cactus, X3), speaks(cactus, X4)],
+    INPUT = [moves(cactus, 0), breathes(cactus, X4), speaks(cactus, X5)],
     prove(GOAL, INPUT, RESULT),
     showProof(RESULT, color).
 
