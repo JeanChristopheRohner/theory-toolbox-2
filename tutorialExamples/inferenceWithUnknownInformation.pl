@@ -1,19 +1,29 @@
 ﻿% NOTES----------------------------------------------------------------------------------------------------------------------------------------------
 
-% Combining probability equations(PR), Constraint Logic Programming (CLP), and meta-interpreters (MI) is a powerful techique for theory representation 
-% and inference. By using PR-CLP-MI it is possible to distinguish between a scenario in which a program entails that P is false, from a scenario 
-% in which a program does not entail P. In traditional Prolog, instead, "false" is coupled with "not entailed" (the closed world assumption). 
-% PR-CLP-MI also allows bidirectional reasoning: From premises to conclusion, and from conclusion to premises. That is, we can ask 
-% "Given premises P, is conclusion C true (or false)?", as well as "Given conclusion P, are premises P true (or false)?". The examples below 
-% illustrate the use of PR-CLP-MI. Theory Toolbox 2 implements the MI part and the CLPR module represents the CLP part (loaded by theoryToolbox2.pl).
+% Combining probability equations (PR), Constraint Logic Programming (CLP), and meta-interpreters (MI) is a powerful techique for theory/knowledge 
+% representation and inference. Besides having the expressive power of first order logic, PR-CLP-MI also allows one to:
+
+% (1) Distinguish between a scenario in which a program entails that P is false, from a scenario in which a program does not entail P. 
+% In traditional Prolog, instead, "false" is coupled with "not entailed" (the closed world assumption). 
+
+% (2) Do bidirectional reasoning: From premises to conclusion, and from conclusion to premises. That is, we can ask "Given premises P, 
+% is conclusion C true (or false)?", as well as "Given conclusion P, are premises P true (or false)?".
+
+% (3) Reason using unknown information. In some scenarios we may know whether premises P1, P2, ..., Pn are true or false, but not know
+% whether premises Q1, Q2, ..., Qn are true or false. Sometimes we can still infer whether a conclusion that involves the Ps and Qs is true or false.
+
+% The examples below illustrate the use of PR-CLP-MI. Theory Toolbox 2 implements the MI part and the CLPR module 
+% implements the CLP part (loaded by theoryToolbox2.pl).
 
 % © Jean-Christophe Rohner 2022
+
 
 % SETUP----------------------------------------------------------------------------------------------------------------------------------------------
 
 :- include('theoryToolbox2.pl').
 :- style_check(-singleton).
 :- style_check(-discontiguous).
+
 
 % HELLO WORLD EXAMPLE -------------------------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +45,7 @@ q2 ⇐    GOAL = (human(E, X1), animal(E, X2), thing(E, X3)),
     INPUT = [moves(mushroom, X4), breathes(mushroom, X5), speaks(mushroom, 0)],
     prove(GOAL, INPUT, RESULT),
     showProof(RESULT, color).
+
 
 % PSYCHIATRIC DIAGNOSIS EXAMPLE ----------------------------------------------------------------------------------------------------------------------
 
@@ -69,20 +80,20 @@ event(H, has, agoraphobia, X0) ⇐
     ∧ {X0 = X1 * X2 * (1 - X3) * X4 * X5}.
 
 event(H, has, generalizedAnxietyDisorder, X0) ⇐
-    event(H, fears, variousSituations, X1),
-    event(H, worriesAbout, variousSituations, X2),
-    event(H, controls, event(H, worriesAbout, variousSituations, 1), X3),
-    event(variousSituations, hasProperty, dangerous, X4),
-    event(H, experiences, persistentArousal, X5),
-    event(H, hasProperty, functionalImpairment, X6),
-    {X0 = X1 * X2 * (1 - X3) * (1 - X4) * X5 * X6}.
+    event(H, fears, variousSituations, X1)
+    ∧ event(H, worriesAbout, variousSituations, X2)
+    ∧ event(H, controls, event(H, worriesAbout, variousSituations, 1), X3)
+    ∧ event(variousSituations, hasProperty, dangerous, X4)
+    ∧ event(H, experiences, persistentArousal, X5)
+    ∧ event(H, hasProperty, functionalImpairment, X6)
+    ∧ {X0 = X1 * X2 * (1 - X3) * (1 - X4) * X5 * X6}.
 
 event(H, has, panicDisorder, X0) ⇐
-    event(H, experiences, panicAttacks, X1),
-    event(H, fears, panicAttacks, X2),
-    event(panicAttacks, hasProperty, dangerous, X3),
-    event(H, hasProperty, functionalImpairment, X4),
-    {X0 = X1 * X2 * (1 - X3) * X4}.
+    event(H, experiences, panicAttacks, X1)
+    ∧ event(H, fears, panicAttacks, X2)
+    ∧ event(panicAttacks, hasProperty, dangerous, X3)
+    ∧ event(H, hasProperty, functionalImpairment, X4)
+    ∧ {X0 = X1 * X2 * (1 - X3) * X4}.
 
 event(H, fears, T, X).
 event(H, avoids, T, X).
@@ -110,6 +121,7 @@ q3 ⇐
     ]
     ∧ prove(GOAL, INPUT, RESULT)
     ∧ showProof(RESULT, color).
+
 
 % CAUSAL REASONING EXAMPLE ---------------------------------------------------------------------------------------------------------------------------
 
