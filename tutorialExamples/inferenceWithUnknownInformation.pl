@@ -3,11 +3,11 @@
 % Combining probability equations (PR), Constraint Logic Programming (CLP), and meta-interpreters (MI) is a powerful techique for theory/knowledge 
 % representation and inference. Besides having the expressive power of first order logic, PR-CLP-MI also allows one to:
 
-% (1) Distinguish between a scenario in which a program entails that P is false, from a scenario in which a program does not entail P. 
+% (1) Distinguish between a scenario in which a program entails that C is false, from a scenario in which a program does not entail C. 
 % In traditional Prolog, instead, "false" is coupled with "not entailed" (the closed world assumption). 
 
-% (2) Do bidirectional reasoning: From premises to conclusion, and from conclusion to premises. That is, we can ask "Given premises P, 
-% is conclusion C true (or false)?", as well as "Given conclusion P, are premises P true (or false)?".
+% (2) Do bidirectional reasoning: From premises to conclusion, and from conclusion to premises. That is, we can ask "Given premises P1, P2, ..., Pn, 
+% is conclusion C true (or false)?", as well as in some cases "Given conclusion C, are premises P1, P2, ..., Pn true (or false)?".
 
 % (3) Reason using unknown information. In some scenarios we may know whether premises P1, P2, ..., Pn are true or false, but not know
 % whether premises Q1, Q2, ..., Qn are true or false. Sometimes we can still infer whether a conclusion that involves the Ps and Qs is true or false.
