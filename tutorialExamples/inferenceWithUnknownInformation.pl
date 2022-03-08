@@ -1,7 +1,7 @@
 ﻿% NOTES----------------------------------------------------------------------------------------------------------------------------------------------
 
 % Combining probability equations (PR), Constraint Logic Programming (CLP), and meta-interpreters (MI) is a powerful techique for theory/knowledge 
-% representation and inference. Besides having the expressive power of first order logic, PR-CLP-MI also allows one to:
+% representation and inference. Besides having the expressive power of Prolog, PR-CLP-MI also allows one to:
 
 % (1) Distinguish between a scenario in which a program entails that C is false, from a scenario in which a program does not entail C. 
 % In traditional Prolog, instead, "false" is coupled with "not entailed" (the closed world assumption). 
@@ -27,10 +27,11 @@
 
 % HELLO WORLD EXAMPLE -------------------------------------------------------------------------------------------------------------------------------
 
-% The equations relate the probabilities of being human, an animal or a thing to various properties. In q1 note that we obtain a probability value
+% The equations below relate the probabilities of being human, an animal or a thing to various properties. In q1 note that we obtain a probability value
 % for each category (human, animal and thing) even if the truth or falsity of some premises is unknown (e.g. whether a cactus breathes).
-% A probability of 0 in a conclusion (e.g. that a cactus is human) represents false, which the program can entails. The query q2 represents a 
+% A probability of 0 in a conclusion (e.g. that a cactus is human) represents false, which the program can entail. The query q2 represents a 
 % scenario in which a program entails that some of the probabilities of belonging to a category are unknown.
+
 
 human(E, X1) ⇐ moves(E, X2) ∧ breathes(E, X3) ∧ speaks(E, X4) ∧ {X1 = X2 * X3 * X4}.
 animal(E, X1) ⇐ moves(E, X2) ∧ breathes(E, X3) ∧ speaks(E, X4) ∧ {X1 = X2 * X3 * (1 - X4)}.
@@ -49,11 +50,12 @@ q2 ⇐    GOAL = (human(E, X1), animal(E, X2), thing(E, X3)),
 
 % PSYCHIATRIC DIAGNOSIS EXAMPLE ----------------------------------------------------------------------------------------------------------------------
 
-% These clauses capture the essence of the main anxiety disorders according to the DSM5. In the query q3 note that the conclusion (in GOAL) states that 
+% These clauses capture the essence of the main anxiety disorders according to the DSM5. In query q3 note that the conclusion (in GOAL) states that 
 % h has one anxiety disorder but we dont know which (the assumption is that disorders are mutually exclusive). Even if information about a lot of 
 % symptoms is missing (INPUT only defines some of the symptom probabilities) the program can still arrive at a correct diagnosis.
 
 % American Psychiatric Association (2013). Diagnostic and statistical manual of mental disorders (DSM-5®). American Psychiatric Publishers.
+
 
 event(H, has, specificPhobia, X0) ⇐
     event(H, fears, object, X1)
