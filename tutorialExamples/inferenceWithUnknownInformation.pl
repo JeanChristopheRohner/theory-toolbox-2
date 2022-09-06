@@ -27,24 +27,38 @@
 
 % HELLO WORLD EXAMPLE -------------------------------------------------------------------------------------------------------------------------------
 
-% The equations below relate the probabilities of being human, an animal or a thing to various properties. In q1 note that we obtain a probability value
-% for each category (human, animal and thing) even if the truth or falsity of some premises is unknown (e.g. whether a cactus breathes).
-% A probability of 0 in a conclusion (e.g. that a cactus is human) represents false, which the program can entail. The query q2 represents a 
-% scenario in which a program entails that some of the probabilities of belonging to a category are unknown.
+% Different animal groups have or do not have certain properties. The probability of belonging to either one of the 6 groups is 1 
+% (as defined in itsa/0). Query q1 shows that it is possible to infer that i is an amphibian even if several several probabilities are 
+% unknown (the Xs).
 
+isa(E, mammal, X1) ⇐ property(E, warmBlooded, X2) ∧ property(E, hair, X3) ∧ property(E, milk, X4) ∧ property(E, backbone, X5) ∧ {X1 = X2 * X3 * X4 * X5}.
+isa(E, bird, X1) ⇐ property(E, warmBlooded, X2) ∧ property(E, feathers, X3) ∧ property(E, backbone, X4) ∧ {X1 = X2 * X3 * X4}.
+isa(E, reptile, X1) ⇐ property(E, warmBlooded, X2) ∧ property(E, scales, X3) ∧ property(E, backbone, X4) ∧ {X1 = (1 - X2) * X3 * X4}.
+isa(E, amphibian, X1) ⇐ property(E, warmBlooded, X2) ∧ property(E, scales, X3) ∧ property(E, backbone, X4) ∧ {X1 = (1 - X2) * (1 - X3) * X4}.
+isa(E, invertebrate, X1) ⇐ property(E, backbone, X2) ∧ {X1 = 1 - X2}.
+isa(E, fish, X1) ⇐ property(E, warmBlooded, X2) ∧ property(E, backbone, X3) ∧ property(E, gills, X4) ∧ {X1 = (1 - X2) * X3 * X4}.
 
-human(E, X1) ⇐ moves(E, X2) ∧ breathes(E, X3) ∧ speaks(E, X4) ∧ {X1 = X2 * X3 * X4}.
-animal(E, X1) ⇐ moves(E, X2) ∧ breathes(E, X3) ∧ speaks(E, X4) ∧ {X1 = X2 * X3 * (1 - X4)}.
-thing(E, X1) ⇐ human(E, X2) ∧ animal(E, X3) ∧ {X1 = (1 - X2) * (1 - X3)}.
+itsa ⇐ 
+    isa(I, mammal, X2)
+    ∧ isa(I, bird, X3)
+    ∧ isa(I, reptile, X4)
+    ∧ isa(I, amphibian, X5)
+    ∧ isa(I, invertebrate, X6)
+    ∧ isa(I, fish, X7)
+    ∧ {X2 + X3 + X4 + X5 + X6 + X7 = 1}.
 
-q1 ⇐    GOAL = (human(E, X1), animal(E, X2), thing(E, X3)),
-    INPUT = [moves(cactus, 0), breathes(cactus, X4), speaks(cactus, X5)],
-    prove(GOAL, INPUT, RESULT),
-    showProof(RESULT, color).
-
-q2 ⇐    GOAL = (human(E, X1), animal(E, X2), thing(E, X3)),
-    INPUT = [moves(mushroom, X4), breathes(mushroom, X5), speaks(mushroom, 0)],
-    prove(GOAL, INPUT, RESULT),
+q1 ⇐ 
+    GOAL = itsa,
+    INPUT = [
+        property(i, warmBlooded, 0),
+        property(i, hair, X),
+        property(i, milk, X),
+        property(i, backbone, 1),
+        property(i, feathers, X),
+        property(i, scales, 0),
+        property(i, gills, 0)
+    ],
+    prove(GOAL, INPUT, RESULT), 
     showProof(RESULT, color).
 
 
