@@ -1,7 +1,7 @@
 ﻿% -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % INFO
 
-% © Jean-Christophe Rohner 2019 - 2021
+% © Jean-Christophe Rohner 2019
 % This is experimental software. Use at your own risk.
 % See the LICENSE file for more information.
 
